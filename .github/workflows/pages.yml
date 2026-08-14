@@ -1,0 +1,48 @@
+name: Publicar site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Preparar arquivos do site
+        run: |
+          mkdir -p _site/assets
+          cp index.html _site/index.html
+          cp robots.txt _site/robots.txt
+          cp album.webp _site/assets/album.webp
+          cp ateez.webp _site/assets/ateez.webp
+          cp avatar.webp _site/assets/avatar.webp
+          cp xlov.webp _site/assets/xlov.webp
+          touch _site/.nojekyll
+
+      - name: Configurar Pages
+        uses: actions/configure-pages@v5
+
+      - name: Enviar artefato
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+
+      - name: Publicar
+        id: deployment
+        uses: actions/deploy-pages@v4
