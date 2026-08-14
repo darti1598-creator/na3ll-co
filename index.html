@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="@na3ll.co — biografia pessoal com redes, favoritos e música." />
+  <title>@na3ll.co</title>
+  <style>
+    :root{
+      --bg:#f2edf4;
+      --bg-soft:#ebe3ee;
+      --surface:rgba(255,248,253,.86);
+      --surface-strong:rgba(255,251,254,.96);
+      --surface-soft:#f6eef6;
+      --text:#291f31;
+      --muted:#716579;
+      --line:#dccde1;
+      --pink:#e6a8c8;
+      --pink-soft:#f0c4d9;
+      --pink-strong:#cf79ad;
+      --rose:#f6d7e6;
+      --blue:#c9d5ef;
+      --lilac:#d8c7eb;
+      --deep:#5f4b68;
+      --shadow:0 14px 38px rgba(79,52,89,.10);
+      --shadow-strong:0 20px 48px rgba(79,52,89,.15);
+      --radius:26px;
+    }
+
+    html[data-theme="dark"]{
+      --bg:#100f18;
+      --bg-soft:#181724;
+      --surface:rgba(28,25,39,.90);
+      --surface-strong:rgba(34,30,47,.96);
+      --surface-soft:#1b1827;
+      --text:#fcf7ff;
+      --muted:#bcaec5;
+      --line:#322c40;
+      --pink:#ef9eca;
+      --pink-soft:#f1b4d6;
+      --pink-strong:#ff79bf;
+      --rose:#2a1f31;
+      --blue:#93b2e8;
+      --lilac:#bda2ec;
+      --deep:#ecdfff;
+      --shadow:0 18px 42px rgba(0,0,0,.34);
+      --shadow-strong:0 24px 60px rgba(0,0,0,.42);
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      color:var(--text);
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 14% 10%, rgba(255,172,211,.30), transparent 22%),
+        radial-gradient(circle at top right, rgba(230,168,200,.32), transparent 26%),
+        radial-gradient(circle at left 20%, rgba(216,199,235,.28), transparent 30%),
+        radial-gradient(circle at 82% 78%, rgba(201,213,239,.22), transparent 26%),
+        linear-gradient(180deg, #f6edf4 0%, #efe3ef 54%, #ebdded 100%);
+      min-height:100vh;
+      transition:background .28s ease, color .28s ease;
+    }
+
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      background:
+        linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px);
+      background-size:44px 44px;
+      mask-image:linear-gradient(to bottom, transparent, black 16%, black 82%, transparent);
+      opacity:.20;
+      z-index:-1;
+    }
+
+    img{max-width:100%;display:block}
+    a{text-decoration:none;color:inherit}
+    button{font:inherit}
+
+    .container{
+      width:min(1160px, calc(100% - 28px));
+      margin:0 auto;
+      padding:18px 0 48px;
+    }
+
+    .topbar{
+      position:sticky;
+      top:12px;
+      z-index:20;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      padding:12px 14px;
+      border:1px solid var(--line);
+      border-radius:22px;
+      background:var(--surface);
+      backdrop-filter:blur(18px);
+      box-shadow:var(--shadow);
+    }
+
+    .brand{display:flex;align-items:center;gap:10px;font-weight:900;letter-spacing:-.03em;color:var(--deep)}
+    .brand-dot{
+      width:12px;height:12px;border-radius:999px;
+      background:linear-gradient(135deg, var(--pink-strong), var(--lilac));
+      box-shadow:0 0 0 6px rgba(207,121,173,.14);
+    }
+
+    .top-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+    .control, .lang button{
+      border:1px solid var(--line);
+      background:var(--surface-strong);
+      color:var(--text);
+      border-radius:999px;
+      min-height:40px;
+      padding:0 14px;
+      cursor:pointer;
+      transition:.2s ease;
+      box-shadow:0 8px 20px rgba(77,59,112,.05);
+    }
+    .control:hover, .lang button:hover, .social-card:hover, .mini-card:hover, .group-card:hover, .favorite-box:hover{
+      transform:translateY(-2px);
+      box-shadow:var(--shadow-strong);
+    }
+    .lang{display:flex;gap:6px}
+    .lang button.active{
+      background:linear-gradient(135deg, var(--pink-soft), var(--lilac));
+      color:#2a1f33;
+      font-weight:800;
+    }
+
+    .hero{
+      display:grid;
+      grid-template-columns:1.15fr .85fr;
+      gap:22px;
+      align-items:stretch;
+      padding:56px 0 28px;
+    }
+
+    .hero-main, .hero-side, .panel{
+      border:1px solid var(--line);
+      border-radius:34px;
+      background:var(--surface);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+
+    .hero-main{
+      padding:36px;
+      background:
+        radial-gradient(circle at top right, rgba(230,168,200,.17), transparent 34%),
+        radial-gradient(circle at left 40%, rgba(216,199,235,.14), transparent 30%),
+        linear-gradient(180deg, rgba(255,255,255,.28), rgba(255,255,255,.12)),
+        var(--surface);
+    }
+
+    .badge{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:8px 12px;border-radius:999px;border:1px solid var(--line);
+      background:var(--surface-soft);color:var(--muted);font-size:.88rem;font-weight:600;
+    }
+
+    h1{font-size:clamp(3rem, 7vw, 5.8rem);line-height:.92;letter-spacing:-.07em;margin:18px 0 18px}
+    .accent{
+      background:linear-gradient(90deg, var(--pink-strong), #ad8fd6, #89a4d7);
+      -webkit-background-clip:text;background-clip:text;color:transparent;
+    }
+
+    .tagline{margin:0;font-size:1.08rem;line-height:1.8;color:var(--muted);max-width:700px}
+    .tagline strong{color:var(--text);font-size:1.15rem;font-weight:800}
+
+    .hero-cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+    .primary{
+      padding:13px 18px;border-radius:16px;
+      background:linear-gradient(135deg, var(--pink), var(--lilac));
+      color:#291d33;border:1px solid rgba(255,255,255,.55);font-weight:800;
+    }
+    .secondary{
+      padding:13px 18px;border-radius:16px;background:var(--surface-soft);
+      border:1px solid var(--line);font-weight:700;color:var(--text);
+    }
+
+    .hero-side{
+      padding:20px;display:grid;place-items:center;min-height:420px;
+      background:
+        radial-gradient(circle at 18% 18%, rgba(255,160,205,.34), transparent 22%),
+        radial-gradient(circle at 82% 18%, rgba(197,170,255,.26), transparent 22%),
+        radial-gradient(circle at 50% 84%, rgba(255,214,236,.34), transparent 28%),
+        linear-gradient(180deg, rgba(255,255,255,.44), rgba(255,255,255,.18)),
+        linear-gradient(145deg, rgba(255,240,248,.95), rgba(247,236,252,.80));
+    }
+
+    
+    
+    .avatar-shell{
+      width:min(340px, 82vw);
+      aspect-ratio:1;
+      border-radius:34px;
+      padding:14px;
+      background:
+        radial-gradient(circle at 22% 18%, rgba(255,180,220,.40), transparent 24%),
+        radial-gradient(circle at 84% 14%, rgba(201,176,255,.28), transparent 22%),
+        linear-gradient(145deg, rgba(255,255,255,.62), rgba(255,235,245,.34));
+      border:1px solid rgba(255,255,255,.48);
+      box-shadow:0 24px 56px rgba(145,96,136,.18);
+      position:relative;
+      animation:float 5.4s ease-in-out infinite;
+    }
+    .avatar-frame{
+      height:100%;
+      width:100%;
+      border-radius:28px;
+      overflow:hidden;
+      position:relative;
+      background:
+        radial-gradient(circle at 16% 16%, rgba(255,188,222,.24), transparent 18%),
+        radial-gradient(circle at 86% 18%, rgba(206,180,255,.20), transparent 18%),
+        radial-gradient(circle at 82% 82%, rgba(255,220,238,.18), transparent 18%),
+        linear-gradient(180deg, rgba(255,255,255,.64), rgba(255,246,250,.34));
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.30);
+    }
+    .avatar-frame::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        radial-gradient(circle at 11% 18%, rgba(255,255,255,.92) 0 1.5px, transparent 2.5px),
+        radial-gradient(circle at 88% 16%, rgba(255,255,255,.88) 0 2px, transparent 3px),
+        radial-gradient(circle at 18% 76%, rgba(255,255,255,.75) 0 1.5px, transparent 2.5px),
+        radial-gradient(circle at 84% 72%, rgba(255,200,225,.82) 0 3px, transparent 5px),
+        radial-gradient(circle at 92% 63%, rgba(255,255,255,.92) 0 1.3px, transparent 2.5px);
+      opacity:.95;
+      z-index:1;
+    }
+    .avatar-character{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      filter:saturate(1.22) contrast(1.07) brightness(1.02) hue-rotate(-4deg);
+    }
+    .static-avatar::after{
+      content:"";
+      position:absolute;
+      inset:18px;
+      border-radius:26px;
+      pointer-events:none;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.12), transparent 28%, transparent 72%, rgba(255,255,255,.08)),
+        radial-gradient(circle at 12% 12%, rgba(255,193,224,.14), transparent 24%),
+        radial-gradient(circle at 86% 18%, rgba(207,181,255,.14), transparent 22%);
+      mix-blend-mode:screen;
+    }
+    html[data-theme="dark"] .avatar-frame{
+      background:
+        radial-gradient(circle at 16% 16%, rgba(255,121,191,.16), transparent 18%),
+        radial-gradient(circle at 86% 18%, rgba(189,162,236,.15), transparent 18%),
+        radial-gradient(circle at 82% 82%, rgba(255,179,220,.12), transparent 18%),
+        linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
+    }
+
+
+    .floating-deco{position:absolute;font-size:1.15rem;color:var(--pink-strong);opacity:.8;animation:twinkle 3.8s ease-in-out infinite}
+    .deco-a{top:16px;right:18px} .deco-b{bottom:20px;left:16px;animation-delay:.8s} .deco-c{top:50%;left:-4px;animation-delay:1.3s}
+
+    .section{padding:18px 0}
+    .section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:16px}
+    .section-head h2{margin:0;font-size:clamp(1.7rem, 4vw, 2.4rem);letter-spacing:-.05em}
+    .section-head p{margin:0;color:var(--muted);font-size:.95rem}
+
+    .grid{display:grid;grid-template-columns:repeat(12, 1fr);gap:14px}
+    .span-7{grid-column:span 7} .span-5{grid-column:span 5} .span-12{grid-column:span 12}
+
+    .panel{padding:22px}
+    .panel h3{margin:0 0 10px;font-size:1.08rem;letter-spacing:-.02em}
+    .panel p{margin:0;color:var(--muted);line-height:1.75}
+
+    .fact-grid{display:grid;grid-template-columns:repeat(2, 1fr);gap:10px;margin-top:16px}
+    .mini-card{
+      border:1px solid var(--line);background:var(--surface-soft);border-radius:18px;padding:14px;transition:.2s ease;
+    }
+    .mini-card b{display:block;font-size:.8rem;color:var(--muted);margin-bottom:5px;font-weight:700;text-transform:lowercase}
+
+    .identity-badges, .interest-list{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+    .chip{
+      display:inline-flex;align-items:center;gap:8px;padding:10px 13px;border-radius:999px;
+      border:1px solid var(--line);background:var(--surface-soft);font-weight:700;
+    }
+
+    .group-grid{display:grid;grid-template-columns:repeat(2, 1fr);gap:14px}
+    .group-card{
+      border:1px solid var(--line);background:var(--surface-soft);border-radius:24px;overflow:hidden;
+      transition:.2s ease;box-shadow:0 10px 26px rgba(41,32,63,.06);
+    }
+    .group-card img{width:100%;aspect-ratio:4/3;object-fit:cover}
+    .group-body{padding:16px}
+    .group-body small{display:block;color:var(--muted);margin-bottom:5px;text-transform:lowercase}
+    .group-body h3{margin:0 0 6px;font-size:1.05rem}
+
+    .favorites-grid{display:grid;grid-template-columns:repeat(4, 1fr);gap:12px;margin-top:4px}
+    .favorite-box{
+      border:1px solid var(--line);background:var(--surface-soft);border-radius:20px;padding:16px;min-height:124px;transition:.2s ease;
+    }
+    .favorite-box .icon{font-size:1.45rem;margin-bottom:12px;display:block}
+    .favorite-box small{display:block;color:var(--muted);margin-bottom:4px;text-transform:lowercase}
+    .favorite-box strong{font-size:1rem;line-height:1.45}
+
+    .music-card{display:grid;grid-template-columns:220px 1fr;gap:18px;align-items:center}
+    .album{
+      aspect-ratio:1;
+      border-radius:22px;
+      overflow:hidden;
+      box-shadow:0 16px 34px rgba(0,0,0,.28);
+      border:1px solid rgba(255,255,255,.10);
+      background:#241b2a;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:0;
+    }
+    .album img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+
+    .player-area{
+      width:100%;
+      min-width:0;
+    }
+    .player-tabs{
+      display:flex;
+      gap:8px;
+      margin-bottom:10px;
+    }
+    .player-tab{
+      border:1px solid var(--line);
+      background:var(--surface-soft);
+      color:var(--text);
+      border-radius:999px;
+      min-height:38px;
+      padding:0 14px;
+      cursor:pointer;
+      font-weight:800;
+      transition:.2s ease;
+    }
+    .player-tab.active{
+      background:linear-gradient(135deg, var(--pink), var(--lilac));
+      color:#2a1d33;
+      border-color:rgba(255,255,255,.24);
+    }
+    .player-pane{display:none}
+    .player-pane.active{display:block}
+    .apple-player,.spotify-embed{
+      width:100%;
+      border:0;
+      border-radius:18px;
+      display:block;
+      background:var(--surface-soft);
+    }
+    .spotify-embed{height:152px}
+    .embed-note{
+      margin:8px 2px 0;
+      color:var(--muted);
+      font-size:.78rem;
+      line-height:1.45;
+    }
+
+    .social-grid{display:grid;grid-template-columns:repeat(3, 1fr);gap:12px}
+    .social-card{
+      display:flex;align-items:center;justify-content:space-between;gap:14px;padding:16px;
+      border:1px solid var(--line);border-radius:18px;background:var(--surface-soft);transition:.2s ease;
+    }
+    .social-card b{display:block} .social-card small{color:var(--muted)} .social-card .go{font-size:1.2rem;color:var(--muted)}
+
+    .contact{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+    .copy{border:1px solid var(--line);background:var(--surface-soft);color:var(--text);padding:12px 15px;border-radius:14px;cursor:pointer;font-weight:700}
+
+    footer{text-align:center;color:var(--muted);padding:38px 10px 10px;font-size:.94rem}
+
+    .cursor-star{position:fixed;pointer-events:none;transform:translate(-50%, -50%);animation:pop .65s ease forwards;color:var(--pink-strong);z-index:99;font-size:13px}
+
+    @keyframes float{50%{transform:translateY(-8px)}}
+    @keyframes twinkle{50%{transform:scale(1.18) rotate(10deg); opacity:.55}}
+    @keyframes pop{0%{opacity:0; transform:translate(-50%,-50%) scale(.3)}35%{opacity:1}100%{opacity:0; transform:translate(-50%,-95%) scale(1.42)}}
+
+    @media(max-width:930px){
+      .hero{grid-template-columns:1fr}
+      .span-7,.span-5{grid-column:span 12}
+      .group-grid{grid-template-columns:1fr}
+      .favorites-grid{grid-template-columns:repeat(2,1fr)}
+      .social-grid{grid-template-columns:repeat(2,1fr)}
+      .music-card{grid-template-columns:1fr}
+      .album{display:block;max-width:220px;margin:0 auto}
+    }
+
+    @media(max-width:620px){
+      .container{width:min(100% - 18px, 760px)}
+      .topbar{top:8px;border-radius:18px}
+      .hero-main,.hero-side,.panel{border-radius:26px}
+      .hero-main{padding:24px}
+      h1{font-size:clamp(2.8rem, 18vw, 4.4rem)}
+      .fact-grid, .favorites-grid, .social-grid{grid-template-columns:1fr}
+      .top-actions{gap:6px}
+      .lang button, .control{min-height:36px; padding:0 12px}
+      .avatar-shell{width:min(270px, 78vw)}
+      .section-head{flex-direction:column; align-items:flex-start}
+    }
+
+    @media(prefers-reduced-motion: reduce){
+      *{animation:none !important; transition:none !important; scroll-behavior:auto !important}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <nav class="topbar">
+      <a class="brand" href="#top">
+        <span class="brand-dot"></span>
+        <span>@na3ll.co</span>
+      </a>
+
+      <div class="top-actions">
+        <div class="lang" aria-label="Idioma">
+          <button data-lang="pt" class="active">PT</button>
+          <button data-lang="en">EN</button>
+          <button data-lang="es">ES</button>
+        </div>
+        <button class="control" id="themeBtn" aria-label="Alternar tema">☾</button>
+      </div>
+    </nav>
+
+    <main id="top">
+      <section class="hero">
+        <article class="hero-main">
+          <span class="badge" data-i18n="badge">✦ meu espaço online</span>
+          <h1><span class="accent">@na3ll.co</span></h1>
+          <p class="tagline">
+            <strong>Between silence and sound, I bloom in pink. 静けさの中で踊る ♡</strong><br>
+            <span data-i18n="heroText">Um cantinho delicado com K-pop, jogos, anime, música, identidade e tudo o que faz sentido no meu universo.</span>
+          </p>
+          <div class="hero-cta">
+            <a href="#links" class="primary" data-i18n="heroBtn1">ver redes</a>
+            <a href="#about" class="secondary" data-i18n="heroBtn2">sobre mim</a>
+          </div>
+        </article>
+
+        <aside class="hero-side">
+          
+<div class="avatar-shell static-avatar">
+            <div class="avatar-frame">
+              <img class="avatar-character" src="assets/avatar.webp" alt="Avatar anime do Nael" />
+            </div>
+            <span class="floating-deco deco-a">✦</span>
+            <span class="floating-deco deco-b">♡</span>
+            <span class="floating-deco deco-c">⋆</span>
+          </div>
+
+        </aside>
+      </section>
+
+      <section class="section" id="about">
+        <div class="section-head">
+          <h2 data-i18n="aboutTitle">sobre mim</h2>
+          <p data-i18n="aboutMini">introvertido, curioso, musical e um pouco pastel ✦</p>
+        </div>
+
+        <div class="grid">
+          <article class="panel span-7">
+            <h3 data-i18n="aboutHeading">oi, eu sou o Nael ♡</h3>
+            <p data-i18n="aboutText">Tenho 23 anos, sou introvertido e curioso. Gosto de dançar K-pop, ouvir música, jogar e mergulhar em anime. Meu estilo mistura K-pop, Y2K e pink pastel. Amo silêncio e música, dois extremos que combinam muito comigo.</p>
+
+            <div class="fact-grid">
+              <div class="mini-card"><b data-i18n="factAnime">anime favorito</b><span>Dungeon Meshi</span></div>
+              <div class="mini-card"><b data-i18n="factGame">jogo favorito</b><span>League of Legends</span></div>
+              <div class="mini-card"><b data-i18n="factCharacter">personagem</b><span>Aphelios</span></div>
+              <div class="mini-card"><b data-i18n="factSeason">estação</b><span data-i18n="winter">Inverno</span></div>
+            </div>
+          </article>
+
+          <article class="panel span-5">
+            <h3 data-i18n="identityTitle">identidade</h3>
+            <p data-i18n="identityText">Uma forma simples e bonita de mostrar essa parte de mim, sem deixar a página com cara de formulário.</p>
+            <div class="identity-badges">
+              <span class="chip">🏳️‍⚧️ <span><b data-i18n="gender">Gênero:</b> Trans</span></span>
+              <span class="chip">♡ <span><b data-i18n="pronouns">Pronomes:</b> <span data-i18n="any">qualquer um</span></span></span>
+            </div>
+
+            <div class="interest-list">
+              <span class="chip">🎤 K-pop</span>
+              <span class="chip">🎮 <span data-i18n="games">Jogos</span></span>
+              <span class="chip">🍥 Anime</span>
+              <span class="chip">🪩 <span data-i18n="dance">Dança</span></span>
+              <span class="chip">🎧 <span data-i18n="music">Música</span></span>
+              <span class="chip">💿 <span data-i18n="fashion">Moda Y2K</span></span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <h2 data-i18n="groupsTitle">grupos favoritos</h2>
+        </div>
+
+        <div class="group-grid">
+          <article class="group-card">
+            <img src="assets/ateez.webp" alt="Imagem enviada pelo usuário para representar o grupo favorito ATEEZ" />
+            <div class="group-body">
+              <small data-i18n="favoriteGroup">grupo favorito</small>
+              <h3>ATEEZ</h3>
+              <p data-i18n="ateezDesc">Energia forte, presença marcante e visual que combina com essa área mais fashion do site.</p>
+            </div>
+          </article>
+
+          <article class="group-card">
+            <img src="assets/xlov.webp" alt="Imagem enviada pelo usuário para representar o grupo favorito XLOV" />
+            <div class="group-body">
+              <small data-i18n="favoriteGroup">grupo favorito</small>
+              <h3>XLOV</h3>
+              <p data-i18n="xlovDesc">Mais leve e elegante, funcionando muito bem com os tons claros, moda e delicadeza da página.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <h2 data-i18n="favoritesTitle">favoritos</h2>
+          <p data-i18n="favoritesMini">coisas importantes no meu mundo</p>
+        </div>
+
+        <div class="favorites-grid">
+          <article class="favorite-box"><span class="icon">🌙</span><small data-i18n="favChar">personagem favorito</small><strong>Aphelios</strong></article>
+          <article class="favorite-box"><span class="icon">🍲</span><small data-i18n="favFood">comida favorita</small><strong data-i18n="food">Strogonoff + doces com amendoim</strong></article>
+          <article class="favorite-box"><span class="icon">🎨</span><small data-i18n="favColors">cores favoritas</small><strong data-i18n="colors">Rosa · Roxo · Preto</strong></article>
+          <article class="favorite-box"><span class="icon">❄️</span><small data-i18n="favSeason">estação favorita</small><strong data-i18n="winter">Inverno</strong></article>
+          <article class="favorite-box"><span class="icon">🐈</span><small data-i18n="favAnimal">animal favorito</small><strong data-i18n="cats">Gatinhos</strong></article>
+          <article class="favorite-box"><span class="icon">🎮</span><small data-i18n="favGame">jogo favorito</small><strong>League of Legends</strong></article>
+          <article class="favorite-box"><span class="icon">🍥</span><small data-i18n="favAnime">anime favorito</small><strong>Dungeon Meshi</strong></article>
+          <article class="favorite-box"><span class="icon">🎧</span><small data-i18n="favStyle">vibe favorita</small><strong data-i18n="style">K-pop · Y2K · pink pastel</strong></article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <h2 data-i18n="musicTitle">minha música</h2>
+          <p data-i18n="musicMini">sem autoplay, só quando quiser dar play 🎧</p>
+        </div>
+
+        <article class="panel span-12">
+          <div class="music-card">
+            <div class="album"><img src="assets/album.webp" alt="Capa da música 1&Only de XLOV" /></div>
+            <div class="player-area">
+              <div class="player-tabs">
+                <button class="player-tab active" type="button" data-player="preview">ouvir aqui ♡</button>
+                <button class="player-tab" type="button" data-player="spotify">Spotify</button>
+              </div>
+
+              <div class="player-pane active" id="player-preview">
+                <iframe
+                  class="apple-player"
+                  allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write"
+                  frameborder="0"
+                  height="175"
+                  sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-top-navigation-by-user-activation"
+                  src="https://embed.music.apple.com/tw/song/1-only/1816647006"
+                  title="1&Only — XLOV — player de prévia">
+                </iframe>
+              </div>
+
+              <div class="player-pane" id="player-spotify">
+                <iframe
+                  class="spotify-embed"
+                  src="https://open.spotify.com/embed/track/0lOOUAYUITTHYyGWWAqKIr?utm_source=generator&theme=0"
+                  title="1&Only — XLOV no Spotify"
+                  allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                  loading="lazy">
+                </iframe>
+                <p class="embed-note">Se esta prévia do ChatGPT bloquear o Spotify, use “ouvir aqui”. No site publicado, mantemos o embed do Spotify.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="section" id="links">
+        <div class="section-head">
+          <h2 data-i18n="linksTitle">me encontre por aí</h2>
+          <p data-i18n="linksMini">meus links principais em um lugar só</p>
+        </div>
+
+        <div class="social-grid">
+          <a class="social-card" href="https://www.instagram.com/na3ll.co/" target="_blank" rel="noopener">
+            <span><b>Instagram</b><small>@na3ll.co</small></span><span class="go">↗</span>
+          </a>
+          <a class="social-card" href="https://open.spotify.com/user/31623aacvwqkudlkl7woegalqdme?si=d6ab38a3954b4868" target="_blank" rel="noopener">
+            <span><b>Spotify</b><small data-i18n="myProfile">meu perfil</small></span><span class="go">↗</span>
+          </a>
+          <a class="social-card" href="https://discordapp.com/users/nael_yuu" target="_blank" rel="noopener">
+            <span><b>Discord</b><small>nael_yuu</small></span><span class="go">↗</span>
+          </a>
+          <a class="social-card" href="https://steamcommunity.com/profiles/76561198676471922/" target="_blank" rel="noopener">
+            <span><b>Steam</b><small data-i18n="myProfile">meu perfil</small></span><span class="go">↗</span>
+          </a>
+          <a class="social-card" href="https://www.twitch.tv/na3ll_co" target="_blank" rel="noopener">
+            <span><b>Twitch</b><small>na3ll_co</small></span><span class="go">↗</span>
+          </a>
+          <a class="social-card" href="https://www.reddit.com/user/Nael_idkmygender/" target="_blank" rel="noopener">
+            <span><b>Reddit</b><small>Nael_idkmygender</small></span><span class="go">↗</span>
+          </a>
+        </div>
+      </section>
+
+      <section class="section">
+        <article class="panel contact">
+          <div>
+            <h3 data-i18n="contactTitle">contato ♡</h3>
+            <p><a href="mailto:naeldenegredo@gmail.com">naeldenegredo@gmail.com</a></p>
+          </div>
+          <button class="copy" id="copyMail" data-i18n="copyBtn">copiar e-mail</button>
+        </article>
+      </section>
+    </main>
+
+    <footer>
+      <span data-i18n="footer">feito com ♡ por</span> <b>@na3ll.co</b> · <span id="year"></span>
+    </footer>
+  </div>
+
+  <script>
+    const i18n = {
+      pt:{
+        badge:"✦ meu espaço online",
+        heroText:"Um cantinho delicado com K-pop, jogos, anime, música, identidade e tudo o que faz sentido no meu universo.",
+        heroBtn1:"ver redes",
+        heroBtn2:"sobre mim",
+        avatarText:"avatar anime personalizado<br>entra aqui depois ♡",
+        aboutTitle:"sobre mim",
+        aboutMini:"introvertido, curioso, musical e um pouco pastel ✦",
+        aboutHeading:"oi, eu sou o Nael ♡",
+        aboutText:"Tenho 23 anos, sou introvertido e curioso. Gosto de dançar K-pop, ouvir música, jogar e mergulhar em anime. Meu estilo mistura K-pop, Y2K e pink pastel. Amo silêncio e música, dois extremos que combinam muito comigo.",
+        factAnime:"anime favorito", factGame:"jogo favorito", factCharacter:"personagem", factSeason:"estação", winter:"Inverno",
+        identityTitle:"identidade", identityText:"Uma forma simples e bonita de mostrar essa parte de mim, sem deixar a página com cara de formulário.",
+        gender:"Gênero:", pronouns:"Pronomes:", any:"qualquer um", games:"Jogos", dance:"Dança", music:"Música", fashion:"Moda Y2K",
+        groupsTitle:"grupos favoritos", groupsMini:"agora com imagens embutidas direto na página ✦", favoriteGroup:"grupo favorito",
+        ateezDesc:"Energia forte, presença marcante e visual que combina com essa área mais fashion do site.",
+        xlovDesc:"Mais leve e elegante, funcionando muito bem com os tons claros, moda e delicadeza da página.",
+        favoritesTitle:"favoritos", favoritesMini:"coisas importantes no meu mundo", favChar:"personagem favorito", favFood:"comida favorita",
+        food:"Strogonoff + doces com amendoim", favColors:"cores favoritas", colors:"Rosa · Roxo · Preto", favSeason:"estação favorita",
+        favAnimal:"animal favorito", cats:"Gatinhos", favGame:"jogo favorito", favAnime:"anime favorito", favStyle:"vibe favorita",
+        style:"K-pop · Y2K · pink pastel", musicTitle:"minha música", musicMini:"sem autoplay, só quando quiser dar play 🎧",
+        linksTitle:"me encontre por aí", linksMini:"meus links principais em um lugar só", myProfile:"meu perfil",
+        contactTitle:"contato ♡", copyBtn:"copiar e-mail", copied:"copiado ♡", footer:"feito com ♡ por"
+      },
+      en:{
+        badge:"✦ my online space",
+        heroText:"A delicate little corner with K-pop, games, anime, music, identity and everything that makes sense in my universe.",
+        heroBtn1:"see links", heroBtn2:"about me", avatarText:"custom anime avatar<br>will go here later ♡",
+        aboutTitle:"about me", aboutMini:"introverted, curious, musical and a little pastel ✦", aboutHeading:"hi, I'm Nael ♡",
+        aboutText:"I'm 23, introverted and curious. I love dancing to K-pop, listening to music, gaming and getting lost in anime. My style mixes K-pop, Y2K and pink pastel. I love silence and music, two opposites that fit me really well.",
+        factAnime:"favorite anime", factGame:"favorite game", factCharacter:"character", factSeason:"season", winter:"Winter",
+        identityTitle:"identity", identityText:"A simple and pretty way to show this part of me, without making the page feel like a form.",
+        gender:"Gender:", pronouns:"Pronouns:", any:"any", games:"Games", dance:"Dance", music:"Music", fashion:"Y2K Fashion",
+        groupsTitle:"favorite groups", groupsMini:"now with images embedded directly into the page ✦", favoriteGroup:"favorite group",
+        ateezDesc:"Strong energy, striking presence and a look that fits the more fashion-focused side of the site.",
+        xlovDesc:"Lighter and elegant, working really well with the soft tones, fashion and delicacy of the page.",
+        favoritesTitle:"favorites", favoritesMini:"important things in my world", favChar:"favorite character", favFood:"favorite food",
+        food:"Stroganoff + sweets with peanuts", favColors:"favorite colors", colors:"Pink · Purple · Black", favSeason:"favorite season",
+        favAnimal:"favorite animal", cats:"Kittens", favGame:"favorite game", favAnime:"favorite anime", favStyle:"favorite vibe",
+        style:"K-pop · Y2K · pink pastel", musicTitle:"my song", musicMini:"no autoplay, only when you want to press play 🎧",
+        linksTitle:"find me online", linksMini:"all my main links in one place", myProfile:"my profile",
+        contactTitle:"contact ♡", copyBtn:"copy e-mail", copied:"copied ♡", footer:"made with ♡ by"
+      },
+      es:{
+        badge:"✦ mi espacio online",
+        heroText:"Un rinconcito delicado con K-pop, juegos, anime, música, identidad y todo lo que tiene sentido en mi universo.",
+        heroBtn1:"ver redes", heroBtn2:"sobre mí", avatarText:"avatar anime personalizado<br>va aquí después ♡",
+        aboutTitle:"sobre mí", aboutMini:"introvertido, curioso, musical y un poco pastel ✦", aboutHeading:"hola, soy Nael ♡",
+        aboutText:"Tengo 23 años, soy introvertido y curioso. Me gusta bailar K-pop, escuchar música, jugar y sumergirme en el anime. Mi estilo mezcla K-pop, Y2K y pink pastel. Amo el silencio y la música, dos extremos que combinan mucho conmigo.",
+        factAnime:"anime favorito", factGame:"juego favorito", factCharacter:"personaje", factSeason:"estación", winter:"Invierno",
+        identityTitle:"identidad", identityText:"Una forma simple y bonita de mostrar esta parte de mí, sin dejar la página con cara de formulario.",
+        gender:"Género:", pronouns:"Pronombres:", any:"cualquiera", games:"Juegos", dance:"Baile", music:"Música", fashion:"Moda Y2K",
+        groupsTitle:"grupos favoritos", groupsMini:"ahora con imágenes integradas directamente en la página ✦", favoriteGroup:"grupo favorito",
+        ateezDesc:"Energía fuerte, presencia marcada y un look que combina con la parte más fashion del sitio.",
+        xlovDesc:"Más ligero y elegante, funcionando muy bien con los tonos suaves, moda y delicadeza de la página.",
+        favoritesTitle:"favoritos", favoritesMini:"cosas importantes en mi mundo", favChar:"personaje favorito", favFood:"comida favorita",
+        food:"Stroganoff + dulces con maní", favColors:"colores favoritos", colors:"Rosa · Morado · Negro", favSeason:"estación favorita",
+        favAnimal:"animal favorito", cats:"Gatitos", favGame:"juego favorito", favAnime:"anime favorito", favStyle:"vibe favorita",
+        style:"K-pop · Y2K · pink pastel", musicTitle:"mi canción", musicMini:"sin autoplay, solo cuando quieras darle play 🎧",
+        linksTitle:"encuéntrame por ahí", linksMini:"todos mis links principales en un solo lugar", myProfile:"mi perfil",
+        contactTitle:"contacto ♡", copyBtn:"copiar e-mail", copied:"copiado ♡", footer:"hecho con ♡ por"
+      }
+    };
+
+    const html = document.documentElement;
+    const themeBtn = document.getElementById("themeBtn");
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    const savedTheme = localStorage.getItem("na3ll-theme-v3");
+    if(savedTheme) html.dataset.theme = savedTheme;
+    else if(window.matchMedia("(prefers-color-scheme: dark)").matches) html.dataset.theme = "dark";
+
+    function syncThemeBtn(){
+      themeBtn.textContent = html.dataset.theme === "dark" ? "☀" : "☾";
+    }
+    syncThemeBtn();
+
+    themeBtn.addEventListener("click", () => {
+      html.dataset.theme = html.dataset.theme === "dark" ? "light" : "dark";
+      localStorage.setItem("na3ll-theme-v3", html.dataset.theme);
+      syncThemeBtn();
+    });
+
+    document.querySelectorAll("[data-lang]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const lang = btn.getAttribute("data-lang");
+        document.querySelectorAll("[data-lang]").forEach(b => b.classList.toggle("active", b === btn));
+        document.querySelectorAll("[data-i18n]").forEach(node => {
+          const key = node.getAttribute("data-i18n");
+          if(i18n[lang][key]){
+            if(key === "avatarText") node.innerHTML = i18n[lang][key];
+            else node.textContent = i18n[lang][key];
+          }
+        });
+        localStorage.setItem("na3ll-lang-v3", lang);
+        document.documentElement.lang = lang === "pt" ? "pt-BR" : lang;
+      });
+    });
+
+    const savedLang = localStorage.getItem("na3ll-lang-v3");
+    if(savedLang){
+      const btn = document.querySelector(`[data-lang="${savedLang}"]`);
+      if(btn) btn.click();
+    }
+
+    document.getElementById("copyMail").addEventListener("click", async (e) => {
+      const activeLang = document.querySelector("[data-lang].active")?.getAttribute("data-lang") || "pt";
+      await navigator.clipboard.writeText("naeldenegredo@gmail.com");
+      e.target.textContent = i18n[activeLang].copied;
+      setTimeout(() => {
+        e.target.textContent = i18n[activeLang].copyBtn;
+      }, 1300);
+    });
+
+    document.addEventListener("pointerdown", (e) => {
+      const star = document.createElement("span");
+      star.className = "cursor-star";
+      star.textContent = Math.random() > .5 ? "✦" : "♡";
+      star.style.left = e.clientX + "px";
+      star.style.top = e.clientY + "px";
+      document.body.appendChild(star);
+      setTimeout(() => star.remove(), 700);
+    });
+  
+    document.querySelectorAll(".player-tab").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".player-tab").forEach(b => b.classList.toggle("active", b === btn));
+        document.querySelectorAll(".player-pane").forEach(p => p.classList.remove("active"));
+        const pane = document.getElementById("player-" + btn.dataset.player);
+        if(pane) pane.classList.add("active");
+      });
+    });
+
+  </script>
+</body>
+</html>
