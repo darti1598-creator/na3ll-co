@@ -1,7 +1,7 @@
 {
-  "versionCode": 3,
-  "versionName": "0.3.0",
-  "apkUrl": "",
-  "sha256": "",
-  "notes": "Central de Downloads interna, novo ícone do gatinho e atualizações pelo próprio app."
+  "versionCode": 4,
+  "versionName": "0.3.1",
+  "apkUrl": "https://raw.githubusercontent.com/darti1598-creator/na3ll-co/kawaii-music-updates/kawaii-music/KawaiiMusic-v0.3.1.apk",
+  "sha256": "9654cfa453faa175e6ea74fd2e708da8f9fc9fd3f38f8382831b7e1334d23bb4",
+  "notes": "Correção do ícone do KawaiiMusic: agora o launcher usa o gatinho rosa oficial."
 }
