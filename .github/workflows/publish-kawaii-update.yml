@@ -17,26 +17,26 @@ jobs:
         with:
           ref: kawaii-music-updates
 
-      - name: Download signed v0.3.1 artifact
+      - name: Download signed v0.3.2 artifact
         env:
-          ARTIFACT_URL: "https://sdmntprbrazilsouth.oaiusercontent.com/files/00000000-f864-820e-bc14-44313f4249c1/raw?se=2026-09-18T18%3A08%3A18Z&sp=r&sv=2026-02-06&sr=b&scid=64b844f7-2837-5fb0-9afe-5f6414ace6e6&skoid=db6dad9e-03ee-465b-aef6-ce0f63a161dc&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-18T13%3A44%3A30Z&ske=2026-09-19T13%3A44%3A30Z&sks=b&skv=2026-02-06&sig=zIz6yzm8G%2BerhsQWw6KN2EN%2BetjHhsyZWIy5tTabdyk%3D"
+          ARTIFACT_URL: "https://sdmntprbrazilsouth.oaiusercontent.com/files/00000000-bb3c-820e-b114-1bc074c6c31a/raw?se=2026-09-18T19%3A27%3A34Z&sp=r&sv=2026-02-06&sr=b&scid=975253b9-ffff-57bd-b76d-131ecac14237&skoid=db6dad9e-03ee-465b-aef6-ce0f63a161dc&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-18T13%3A23%3A02Z&ske=2026-09-19T13%3A23%3A02Z&sks=b&skv=2026-02-06&sig=5YOTZlMgwWot4ARn28076i26zY7ZH/iGR1n3/7pZDVc%3D"
         run: |
           set -euo pipefail
           curl -fL "$ARTIFACT_URL" -o /tmp/artifact.zip
           mkdir -p /tmp/kawaii-artifact
           unzip -q /tmp/artifact.zip -d /tmp/kawaii-artifact
-          test -f /tmp/kawaii-artifact/KawaiiMusic-v0.3.1.apk
+          test -f /tmp/kawaii-artifact/KawaiiMusic-v0.3.2.apk
           mkdir -p kawaii-music
-          cp /tmp/kawaii-artifact/KawaiiMusic-v0.3.1.apk kawaii-music/KawaiiMusic-v0.3.1.apk
-          SHA="$(sha256sum kawaii-music/KawaiiMusic-v0.3.1.apk | awk '{print $1}')"
-          test "$SHA" = "9654cfa453faa175e6ea74fd2e708da8f9fc9fd3f38f8382831b7e1334d23bb4"
+          cp /tmp/kawaii-artifact/KawaiiMusic-v0.3.2.apk kawaii-music/KawaiiMusic-v0.3.2.apk
+          SHA="$(sha256sum kawaii-music/KawaiiMusic-v0.3.2.apk | awk '{print $1}')"
+          test "$SHA" = "1d9829ea2147fa87c31ec1d7f4145e300679a533862fb21d708306846487d6dd"
           cat > kawaii-music/latest.json <<EOF
           {
-            "versionCode": 4,
-            "versionName": "0.3.1",
-            "apkUrl": "https://raw.githubusercontent.com/darti1598-creator/na3ll-co/kawaii-music-updates/kawaii-music/KawaiiMusic-v0.3.1.apk",
+            "versionCode": 5,
+            "versionName": "0.3.2",
+            "apkUrl": "https://raw.githubusercontent.com/darti1598-creator/na3ll-co/kawaii-music-updates/kawaii-music/KawaiiMusic-v0.3.2.apk",
             "sha256": "$SHA",
-            "notes": "Correção do ícone do KawaiiMusic: agora o launcher usa o gatinho rosa oficial."
+            "notes": "Correção definitiva do ícone: o KawaiiMusic agora aponta diretamente para o novo PNG do gatinho rosa no launcher."
           }
           EOF
 
@@ -44,6 +44,6 @@ jobs:
         run: |
           git config user.name "Kawaii Music Updater"
           git config user.email "actions@users.noreply.github.com"
-          git add kawaii-music/KawaiiMusic-v0.3.1.apk kawaii-music/latest.json
-          git commit -m "Publish Kawaii Music v0.3.1" || exit 0
+          git add kawaii-music/KawaiiMusic-v0.3.2.apk kawaii-music/latest.json
+          git commit -m "Publish Kawaii Music v0.3.2" || exit 0
           git push origin kawaii-music-updates
